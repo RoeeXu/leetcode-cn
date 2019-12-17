@@ -15,7 +15,7 @@ public:
             for(int i = 0; i < S.length(); i++) {
                 char tmp = S[0];
                 S = S.substr(1) + tmp;
-                res = min(res, S);
+                if(S < res) res = S;
             }
         else sort(res.begin(), res.end());
         return res;
