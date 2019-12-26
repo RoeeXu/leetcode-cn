@@ -17,8 +17,7 @@ public:
         sort(rods.begin(), rods.end(), greater<int>());
         int sum = 0;
         for(int i : rods) sum += i;
-        dfs(rods, 0, rods[0], 0, sum - rods[0]);
-        dfs(rods, 0, 0, 0, sum - rods[0]);
+        dfs(rods, 0, 0, 0, sum);
         return res;
     }
     
@@ -26,10 +25,10 @@ public:
     {
         if(abs(left - right) > remain || left + right + remain >> 1 <= res) return;
         if(left == right && left > res) res = left;
-        if(++idx == v.size()) return;
-        dfs(v, idx, left + v[idx], right, remain - v[idx]);
-        dfs(v, idx, left, right + v[idx], remain - v[idx]);
-        dfs(v, idx, left, right, remain - v[idx]);
+        if(idx == v.size()) return;
+        dfs(v, idx+1, left + v[idx], right, remain - v[idx]);
+        dfs(v, idx+1, left, right + v[idx], remain - v[idx]);
+        dfs(v, idx+1, left, right, remain - v[idx]);
     }
     
 //     int INF = INT_MIN / 3;
