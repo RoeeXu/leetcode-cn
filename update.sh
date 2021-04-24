@@ -11,7 +11,9 @@
 
 TIME=`date +'%Y-%m-%d %H:%M:%S'`
 git pull
-git add *; git commit -m "$TIME"; git push
+git add .
+git commit -m "$TIME"
+git push
 
 # vim: set expandtab ts=4 sw=4 sts=4 tw=100
 
