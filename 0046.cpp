@@ -9,6 +9,31 @@
 
 class Solution {
 public:
+    void helper(vector<vector<int>>& res, vector<int>& nums, int start)
+    {
+        if (start == nums.size())
+        {
+            res.emplace_back(nums);
+            return;
+        }
+        for (int i = start; i < nums.size(); i++)
+        {
+            swap(nums[start], nums[i]);
+            helper(res, nums, start + 1);
+            swap(nums[start], nums[i]);
+        }
+        return;
+    }
+
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> res;
+        helper(res, nums, 0);
+        return res;
+    }
+};
+
+class Solution {
+public:
     // demo
     void search(int& count, vector<int>& nums, vector<bool>& visit, vector<vector<int>>& res, vector<int>& tmp){
         if(count == nums.size())
