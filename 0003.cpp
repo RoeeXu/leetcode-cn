@@ -10,6 +10,33 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
+        int l = 0, r = 0, n = s.length();
+        int res = 0, tmp = 0;
+        int save[128] = {0};
+        while (r < n)
+        {
+            while (r < n && save[s[r]] == 0)
+            {
+                save[s[r++]] = 1;
+                tmp++;
+            }
+            res = max(res, tmp);
+            if (r == n) return res;
+            while (s[l] != s[r])
+            {
+                save[s[l++]] = 0;
+                tmp--;
+            }
+            l++;
+            r++;
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
         map<char, int> tp;
         int n = s.length(), res = 0;
         int head = 0, tail = 0;
