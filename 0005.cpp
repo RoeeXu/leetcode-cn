@@ -7,54 +7,123 @@
 * Brief:
 ****************************************************/
 
+// cut extend O(n) O(n) 8ms
 class Solution {
 public:
-    string init(string s){
-        int len = s.length();
-        string ans = "$";
-        for(int i = 0; i < len; i++){
-            ans += ("#");
-            ans += s[i];
-        }
-        ans += "#^";
-        return ans;
+    int mid_extend_len(string& s, int l, int r)
+    {
+        while (l >= 0 && r < s.length() && s[l] == s[r]) { l--; r++; }
+        return (r - l - 2) / 2;
     }
-    string Manacher(string s, int slen, string ys){
-        int id = 0, mx = 0, po = 0, ans = 0;
-        vector<int> ve(slen + 5, 0);
-        for(int i = 1; i < slen; i++){
-            if(i < mx){
-                ve[i] = min(ve[2 * id - i], mx - i);
-            }
-            else{
-                ve[i] = 1;
-            }
-            while(s[i - ve[i]] == s[i + ve[i]]){
-                ve[i]++;
-            }
-            if(mx < (i + ve[i])){
-                id = i;
-                mx = i + ve[i];
-            }
-            if(ve[i] - 1 > ans){
-                ans = ve[i] - 1;
-                po = i;
-            }
 
-        }
-        //cout << po << " " << ans << endl;
-        //cout << s << endl;
-        //string anss = ys.substr((po - ans - 1) / 2, ans);
-        //cout << anss << endl;
-        //return anss;
-        auto start = ys.cbegin() + (po - ans - 1) / 2;
-        return string(start, start + ans);
-    }
     string longestPalindrome(string s) {
-        string nowS = init(s);
-        return Manacher(nowS, nowS.length(), s);
+        string t = "#";
+        for (auto c : s)
+        {
+            t += c;
+            t += '#';
+        }
+        s = t;
+        int right = -1, j = -1;
+        int pos = 0, res = 1;
+        vector<int> save;
+        for (int i = 0; i < s.length(); i++)
+        {
+            int len = 0;
+            if (right > i)
+            {
+                int gap = min(save[2 * j - i], right - i);
+                len = mid_extend_len(s, i - gap, i + gap);
+            }
+            else
+            {
+                len = mid_extend_len(s, i, i);
+            }
+            save.push_back(len);
+            if (i + len > right)
+            {
+                right = i + len;
+                j = i;
+            }
+            if (2 * len + 1 > res)
+            {
+                res = 2 * len + 1;
+                pos = i - len;
+            }
+        }
+        string a = "";
+        for (int i = pos; i < pos + res; i++)
+            if (s[i] != '#')
+                a += s[i];
+        return a;
     }
 };
+
+
+// // extend O(n^2) O(1) 20ms
+// class Solution {
+// public:
+//     pair<int, int> mid_extend(string& s, int l, int r)
+//     {
+//         while (l >= 0 && r < s.length() && s[l] == s[r]) { l--; r++; }
+//         return {l + 1, r - 1};
+//     }
+
+//     string longestPalindrome(string s) {
+//         int pos = 0, res = 1;
+//         for (int i = 0; i < s.length() - 1; i++)
+//         {
+//             auto [x1, y1] = mid_extend(s, i, i);
+//             auto [x2, y2] = mid_extend(s, i, i + 1);
+//             if (y1 - x1 >= res)
+//             {
+//                 res = y1 - x1 + 1;
+//                 pos = x1;
+//             }
+//             if (y2 - x2 >= res)
+//             {
+//                 res = y2 - x2 + 1;
+//                 pos = x2;
+//             }
+//         }
+//         return s.substr(pos, res);
+//     }
+// };
+
+
+// // dp O(n^2) O(n^2) 220ms
+// class Solution {
+// public:
+//     string longestPalindrome(string s) {
+//         int n = s.length();
+//         if (n < 2)
+//             return s;
+//         bool dp[1001][1001];
+//         memset(dp, 0, sizeof(dp));
+//         for (int i = 0; i < n - 1; i++)
+//         {
+//             dp[i][i] = true;
+//             dp[i][i + 1] = (s[i] == s[i + 1]);
+//         }
+//         dp[n - 1][n - 1] = true;
+//         for (int L = 3; L <= n; L++)
+//             for (int i = 0; i < n + 1 - L; i++)
+//                 dp[i][i + L - 1] = dp[i + 1][i + L - 2] & (s[i] == s[i + L - 1]);
+//         int res = 0, pos = -1;
+//         for (int i = 0; i < n; i++)
+//             for (int j = i + res; j < n; j++)
+//                 if (dp[i][j])
+//                 {
+//                     int l = j - i + 1;
+//                     if (l > res)
+//                     {
+//                         res = l;
+//                         pos = i;
+//                     }
+//                 }
+//         return s.substr(pos, res);
+//     }
+// };
 
 /* vim: set expandtab ts=4 sw=4 sts=4 tw=100 */
 
