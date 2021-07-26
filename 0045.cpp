@@ -10,6 +10,23 @@
 class Solution {
 public:
     int jump(vector<int>& nums) {
+        int step = 0, max_pos = 0, next_pos = nums[0];
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (max_pos < i)
+            {
+                max_pos = next_pos;
+                step++;
+            }
+            next_pos = max(next_pos, i + nums[i]);
+        }
+        return step;
+    }
+};
+
+class Solution {
+public:
+    int jump(vector<int>& nums) {
         int n = nums.size();
         int tail = 0, head = 0, step = 0, tmp;
         while(1)
