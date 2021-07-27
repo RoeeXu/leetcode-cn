@@ -9,6 +9,31 @@
 
 class Solution {
 public:
+    vector<vector<int>> merge(vector<vector<int>>& arr) {
+        sort(arr.begin(), arr.end());
+        int n = arr.size();
+        vector<vector<int>> res;
+        int L = arr[0][0], R = arr[0][1];
+        for (int i = 1; i < n; i++)
+        {
+            if (arr[i][0] > R)
+            {
+                res.push_back({L, R});
+                L = arr[i][0];
+                R = arr[i][1];
+            }
+            else
+            {
+                R = max(R, arr[i][1]);
+            }
+        }
+        res.push_back({L, R});
+        return res;
+    }
+};
+
+class Solution {
+public:
     // best
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
         vector<vector<int>> ans;
